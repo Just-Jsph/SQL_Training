@@ -8,23 +8,38 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
-    public function index()
-    {
-        $questions = Question::with('dataset')
-            ->latest()
-            ->get();
+    public function index(Request $request)
+{
+    $query = Question::query();
 
-        $topics = Question::whereNotNull('topic')
-            ->where('topic', '!=', '')
-            ->distinct()
-            ->orderBy('topic')
-            ->pluck('topic');
-
-        return view('questions.index', compact(
-            'questions',
-            'topics'
-        ));
+    if ($request->filled('difficulty')) {
+        $query->where(
+            'difficulty',
+            $request->difficulty
+        );
     }
+
+    if ($request->filled('topic')) {
+        $query->where(
+            'topic',
+            $request->topic
+        );
+    }
+
+    $questions = $query->latest()->get();
+
+    $topics = Question::query()
+        ->whereNotNull('topic')
+        ->where('topic', '!=', '')
+        ->distinct()
+        ->orderBy('topic')
+        ->pluck('topic');
+
+    return view('questions.index', compact(
+        'questions',
+        'topics'
+    ));
+}
 
     public function create()
     {

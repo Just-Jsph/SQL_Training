@@ -5,7 +5,61 @@
         <h1 class="text-3xl font-bold">
             SQL Question Bank
         </h1>
+<form method="GET" action="{{ route('questions.index') }}" class="flex gap-3 mb-6">
 
+    <select
+    name="difficulty"
+    class="border border-gray-300 rounded px-3 py-2 pr-10 bg-white w-48">
+        <option value="">All Difficulties</option>
+
+        <option
+            value="Beginner"
+            {{ request('difficulty') == 'Beginner' ? 'selected' : '' }}
+        >
+            Beginner
+        </option>
+
+        <option
+            value="Intermediate"
+            {{ request('difficulty') == 'Intermediate' ? 'selected' : '' }}
+        >
+            Intermediate
+        </option>
+
+        <option
+            value="Advanced"
+            {{ request('difficulty') == 'Advanced' ? 'selected' : '' }}
+        >
+            Advanced
+        </option>
+    </select>
+
+
+    <select
+    name="topic"
+    class="border border-gray-300 rounded px-3 py-2 pr-10 bg-white w-56"
+    >
+        <option value="">All Topics</option>
+
+        @foreach($topics as $topic)
+            <option
+                value="{{ $topic }}"
+                {{ request('topic') == $topic ? 'selected' : '' }}
+            >
+                {{ $topic }}
+            </option>
+        @endforeach
+    </select>
+
+
+    <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+    >
+        Filter
+    </button>
+
+</form>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
 
             @forelse($questions as $question)
@@ -51,51 +105,5 @@
         </div>
 
     </div>
-    <form method="GET" class="flex gap-3 mb-6">
-
-    <select name="difficulty" class="border rounded">
-
-        <option value="">
-            All Difficulties
-        </option>
-
-        <option value="Beginner">
-            Beginner
-        </option>
-
-        <option value="Intermediate">
-            Intermediate
-        </option>
-
-        <option value="Advanced">
-            Advanced
-        </option>
-
-    </select>
-
-    <select name="topic" class="border rounded">
-
-        <option value="">
-            All Topics
-        </option>
-
-        @foreach($topics as $topic)
-
-            <option value="{{ $topic }}">
-                {{ $topic }}
-            </option>
-
-        @endforeach
-
-    </select>
-
-    <button
-        type="submit"
-        class="bg-blue-600 text-white px-4 py-2 rounded"
-    >
-        Filter
-    </button>
-
-</form>
 
 </x-app-layout>
